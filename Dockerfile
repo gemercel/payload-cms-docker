@@ -86,7 +86,7 @@ const nextConfig = {
 export default withPayload(nextConfig)
 NEXTEOF
 
-# CACHE_BUST: 2026-01-02-17:51 - Simplified RootLayout to async function
+# CACHE_BUST: 2026-01-02-17:56 - Added custom serverFunction implementation
 # Create tsconfig.json
 RUN cat > tsconfig.json << 'TSEOF'
 {
@@ -226,13 +226,27 @@ GQLPEOF
 RUN cat > 'src/app/(payload)/layout.tsx' << 'LAYOUTEOF'
 import configPromise from '@payload-config'
 import { RootLayout } from '@payloadcms/next/layouts'
+import { getServerSideURL } from '@payloadcms/next/utilities'
 import React from 'react'
 import { importMap } from './admin/importMap'
 import './custom.scss'
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
+  const serverURL = getServerSideURL()
+
+  const serverFunction = async (args: any) => {
+    'use server'
+    const { route, method = 'POST', body } = args
+    const response = await fetch(\`\${serverURL}\${route}\`, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: body ? JSON.stringify(body) : undefined,
+    })
+    return response.json()
+  }
+
   return (
-    <RootLayout config={configPromise} importMap={importMap}>
+    <RootLayout config={configPromise} importMap={importMap} serverFunction={serverFunction}>
       {children}
     </RootLayout>
   )
