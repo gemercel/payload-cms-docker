@@ -102,11 +102,11 @@ RUN cat > tsconfig.json << 'TSEOF'
 }
 TSEOF
 
-# Create src directory structure
-RUN mkdir -p src/app/\\(payload\\)/admin/\\[\\[...segments\\]\\]
-RUN mkdir -p src/app/\\(payload\\)/api/\\[...slug\\]
-RUN mkdir -p src/app/\\(payload\\)/api/graphql
-RUN mkdir -p src/app/\\(payload\\)/api/graphql-playground
+# Create src directory structure using sh -c to handle special characters
+RUN sh -c 'mkdir -p "src/app/(payload)/admin/[[...segments]]"'
+RUN sh -c 'mkdir -p "src/app/(payload)/api/[...slug]"'
+RUN mkdir -p src/app/\(payload\)/api/graphql
+RUN mkdir -p src/app/\(payload\)/api/graphql-playground
 RUN mkdir -p src/collections
 
 # Create payload.config.ts
