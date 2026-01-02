@@ -97,7 +97,7 @@ RUN cat > tsconfig.json << 'TSEOF'
     "plugins": [{ "name": "next" }],
     "paths": {
       "@/*": ["./src/*"],
-      "@payload-config": ["./src/payload.config.ts"]
+      "@payload-config": ["./payload.config.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
@@ -112,8 +112,8 @@ RUN mkdir -p src/app/\(payload\)/api/graphql
 RUN mkdir -p src/app/\(payload\)/api/graphql-playground
 RUN mkdir -p src/collections
 
-# Create payload.config.ts
-RUN cat > src/payload.config.ts << 'PAYLOADEOF'
+# Create payload.config.ts at root (required for @payload-config alias)
+RUN cat > payload.config.ts << 'PAYLOADEOF'
 import { buildConfig } from 'payload'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
@@ -159,7 +159,7 @@ export default buildConfig({
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'REPLACE_ME_WITH_SECRET',
-  typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
+  typescript: { outputFile: path.resolve(dirname, 'src/payload-types.ts') },
   db: mongooseAdapter({ url: process.env.DATABASE_URI || '' }),
   sharp,
 })
