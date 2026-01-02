@@ -65,19 +65,28 @@ COPY --from=deps /app/package.json ./package.json
 # Create next.config.mjs with standalone output (FIX #3)
 RUN cat > next.config.mjs << 'NEXTEOF'
 import { withPayload } from '@payloadcms/next/withPayload'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
   experimental: {
     reactCompiler: false
+  },
+  webpack: (config) => {
+    config.resolve.alias['@payload-config'] = path.resolve(__dirname, './payload.config.ts')
+    return config
   }
 }
 
 export default withPayload(nextConfig)
 NEXTEOF
 
-# CACHE_BUST: 2026-01-02-17:22 - Fixed @payload-config module resolution
+# CACHE_BUST: 2026-01-02-17:26 - Added webpack alias for @payload-config
 # Create tsconfig.json
 RUN cat > tsconfig.json << 'TSEOF'
 {
