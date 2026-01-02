@@ -86,7 +86,7 @@ const nextConfig = {
 export default withPayload(nextConfig)
 NEXTEOF
 
-# CACHE_BUST: 2026-01-02-17:48 - Added serverFunction prop to RootLayout
+# CACHE_BUST: 2026-01-02-17:51 - Simplified RootLayout to async function
 # Create tsconfig.json
 RUN cat > tsconfig.json << 'TSEOF'
 {
@@ -224,18 +224,19 @@ GQLPEOF
 
 # Create payload layout
 RUN cat > 'src/app/(payload)/layout.tsx' << 'LAYOUTEOF'
-import type { Metadata } from 'next'
-import { RootLayout } from '@payloadcms/next/layouts'
-import { serverFunction } from '@payloadcms/next/utilities'
 import configPromise from '@payload-config'
+import { RootLayout } from '@payloadcms/next/layouts'
 import React from 'react'
-import './custom.scss'
 import { importMap } from './admin/importMap'
+import './custom.scss'
 
-type Args = { children: React.ReactNode }
-export const metadata: Metadata = { title: 'Payload CMS' }
-const Layout = ({ children }: Args) => <RootLayout config={configPromise} importMap={importMap} serverFunction={serverFunction}>{children}</RootLayout>
-export default Layout
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <RootLayout config={configPromise} importMap={importMap}>
+      {children}
+    </RootLayout>
+  )
+}
 LAYOUTEOF
 
 # Create custom.scss (empty)
