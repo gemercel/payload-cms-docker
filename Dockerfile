@@ -86,7 +86,7 @@ const nextConfig = {
 export default withPayload(nextConfig)
 NEXTEOF
 
-# CACHE_BUST: 2026-01-02-17:26 - Added webpack alias for @payload-config
+# CACHE_BUST: 2026-01-02-17:48 - Added serverFunction prop to RootLayout
 # Create tsconfig.json
 RUN cat > tsconfig.json << 'TSEOF'
 {
@@ -226,6 +226,7 @@ GQLPEOF
 RUN cat > 'src/app/(payload)/layout.tsx' << 'LAYOUTEOF'
 import type { Metadata } from 'next'
 import { RootLayout } from '@payloadcms/next/layouts'
+import { serverFunction } from '@payloadcms/next/utilities'
 import configPromise from '@payload-config'
 import React from 'react'
 import './custom.scss'
@@ -233,7 +234,7 @@ import { importMap } from './admin/importMap'
 
 type Args = { children: React.ReactNode }
 export const metadata: Metadata = { title: 'Payload CMS' }
-const Layout = ({ children }: Args) => <RootLayout config={configPromise} importMap={importMap}>{children}</RootLayout>
+const Layout = ({ children }: Args) => <RootLayout config={configPromise} importMap={importMap} serverFunction={serverFunction}>{children}</RootLayout>
 export default Layout
 LAYOUTEOF
 
