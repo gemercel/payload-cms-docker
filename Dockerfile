@@ -77,6 +77,7 @@ const nextConfig = {
 export default withPayload(nextConfig)
 NEXTEOF
 
+# CACHE_BUST: 2026-01-02-17:22 - Fixed @payload-config module resolution
 # Create tsconfig.json
 RUN cat > tsconfig.json << 'TSEOF'
 {
