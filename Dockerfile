@@ -237,7 +237,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   const serverFunction = async (args: any) => {
     'use server'
     const { route, method = 'POST', body } = args
-    const response = await fetch(\`\${serverURL}\${route}\`, {
+    const response = await fetch(`${serverURL}${route}`, {
       method,
       headers: { 'Content-Type': 'application/json' },
       body: body ? JSON.stringify(body) : undefined,
