@@ -254,14 +254,7 @@ LAYOUTEOF
 # Create custom.scss (empty)
 RUN touch 'src/app/(payload)/custom.scss'
 
-# Create root layout for Next.js - must NOT wrap with html/body (Payload's RootLayout does that)
-RUN cat > src/app/layout.tsx << 'ROOTLAYOUTEOF'
-import React from 'react'
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return children
-}
-ROOTLAYOUTEOF
+# Root layout removed - Payload's (payload) route group layout handles everything
 
 # Create root page that redirects to admin
 RUN cat > src/app/page.tsx << 'ROOTPAGEEOF'
