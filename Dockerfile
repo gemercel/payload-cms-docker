@@ -226,17 +226,15 @@ GQLPEOF
 RUN cat > 'src/app/(payload)/layout.tsx' << 'LAYOUTEOF'
 import configPromise from '@payload-config'
 import { RootLayout } from '@payloadcms/next/layouts'
-import { getServerSideURL } from '@payloadcms/next/utilities'
 import React from 'react'
 import { importMap } from './admin/importMap'
 import './custom.scss'
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-  const serverURL = getServerSideURL()
-
   const serverFunction = async (args: any) => {
     'use server'
     const { route, method = 'POST', body } = args
+    const serverURL = process.env.NEXT_PUBLIC_SERVER_URL || `http://localhost:${process.env.PORT || 3000}`
     const response = await fetch(`${serverURL}${route}`, {
       method,
       headers: { 'Content-Type': 'application/json' },
