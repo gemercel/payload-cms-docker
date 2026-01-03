@@ -254,7 +254,14 @@ LAYOUTEOF
 # Create custom.scss (empty)
 RUN touch 'src/app/(payload)/custom.scss'
 
-# Root layout removed - Payload's (payload) route group layout handles everything
+# Create root layout - use Fragment to avoid interfering with Payload's RootLayout
+RUN cat > src/app/layout.tsx << 'ROOTLAYOUTEOF'
+import React from 'react'
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>
+}
+ROOTLAYOUTEOF
 
 # Create root page that redirects to admin
 RUN cat > src/app/page.tsx << 'ROOTPAGEEOF'
