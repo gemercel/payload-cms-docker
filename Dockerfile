@@ -284,15 +284,23 @@ RUN mkdir -p public && touch public/.gitkeep
 # Build the application
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+
+# Build-time server URL for admin panel
+ARG NEXT_PUBLIC_SERVER_URL="https://payload.dhruv.vip"
+ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
+
 RUN pnpm build
 
 # =====================================================
 # STAGE 3: RUNNER
 # =====================================================
 FROM base AS runner
+WORKDIR /app
+
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
