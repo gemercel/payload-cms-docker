@@ -254,18 +254,12 @@ LAYOUTEOF
 # Create custom.scss (empty)
 RUN touch 'src/app/(payload)/custom.scss'
 
-# Create root layout for Next.js
+# Create root layout for Next.js - must NOT wrap with html/body (Payload's RootLayout does that)
 RUN cat > src/app/layout.tsx << 'ROOTLAYOUTEOF'
 import React from 'react'
 
-export const metadata = { title: 'Payload CMS', description: 'Payload CMS Application' }
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  )
+  return children
 }
 ROOTLAYOUTEOF
 
