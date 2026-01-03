@@ -35,6 +35,9 @@ COPY --from=deps /app/pnpm-lock.yaml ./pnpm-lock.yaml
 # Copy source files
 COPY . .
 
+# Modify next.config.mjs to add standalone output
+RUN sed -i 's/const nextConfig = {/const nextConfig = {\n  output: '\''standalone'\'',/' next.config.mjs
+
 # Build the application
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
