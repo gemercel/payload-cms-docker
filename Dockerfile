@@ -254,12 +254,18 @@ LAYOUTEOF
 # Create custom.scss (empty)
 RUN touch 'src/app/(payload)/custom.scss'
 
-# Create root layout - use Fragment to avoid interfering with Payload's RootLayout
+# Create root layout for Next.js
 RUN cat > src/app/layout.tsx << 'ROOTLAYOUTEOF'
 import React from 'react'
 
+export const metadata = { title: 'Payload CMS', description: 'Payload CMS Application' }
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  )
 }
 ROOTLAYOUTEOF
 
